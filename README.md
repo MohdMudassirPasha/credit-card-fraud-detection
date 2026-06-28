@@ -1,15 +1,13 @@
-<div align="center">
-
+[![CI](https://github.com/MohdMudassirPasha/credit-card-fraud-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/MohdMudassirPasha/credit-card-fraud-detection/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Production-green)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-orange)
+![Tests](https://img.shields.io/badge/Tests-34%20Passed-brightgreen)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)
 # 💳 Credit Card Fraud Detection
-
-**A production-grade, end-to-end machine-learning system for detecting fraudulent
-credit card transactions on a severely imbalanced dataset.**
-
-[![CI](https://github.com/<your-username>/credit-card-fraud-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/<your-username>/credit-card-fraud-detection/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.11-blue.svg)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
-
+Production-grade end-to-end machine learning system for detecting fraudulent credit card transactions using XGBoost, FastAPI and modern MLOps practices.
 </div>
 
 ---
