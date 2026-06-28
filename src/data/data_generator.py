@@ -5,10 +5,9 @@ Fraud Detection" dataset — 28 anonymised PCA components ``V1..V28`` plus
 ``Time``, ``Amount`` and a binary ``Class`` target — so that downstream code is
 identical whether it runs on real or synthetic data.
 
-It is retained as an **offline fallback**: when the real Kaggle CSV is not
-present (e.g. CI runs, or a fresh clone with no Kaggle credentials), the
-pipeline transparently falls back to this generator so that everything still
-runs end-to-end with zero downloads and zero data-privacy concerns.
+It serves as an offline fallback: when the real Kaggle CSV is not present (e.g.
+CI runs, or a fresh clone without Kaggle credentials), the pipeline uses this
+generator instead, so everything still runs end-to-end without any downloads.
 
 The fraud class is deliberately rare (~0.17%) and only partially separable, so
 the task stays realistic: imbalanced, with irreducible false-positive and

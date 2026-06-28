@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [![CI](https://github.com/MohdMudassirPasha/credit-card-fraud-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/MohdMudassirPasha/credit-card-fraud-detection/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Production-green)
@@ -11,39 +12,48 @@ Production-grade end-to-end machine learning system for detecting fraudulent cre
 </div>
 
 ---
+=======
+# Credit Card Fraud Detection
+
+An end-to-end machine-learning pipeline for detecting fraudulent credit card
+transactions on a highly imbalanced dataset.
+
+[![CI](https://github.com/MohdMudassirPasha/credit-card-fraud-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/MohdMudassirPasha/credit-card-fraud-detection/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)
+>>>>>>> fa192f5 (Checkpoint before API limit)
 
 ## Overview
 
-Credit card fraud detection is an extreme **class-imbalance** problem: fraud is
-~0.17% of transactions, so a model that predicts "never fraud" is 99.8%
-accurate and completely useless. This project demonstrates a realistic,
-deployable pipeline that optimises for the metrics that actually matter on
-imbalanced data — **precision, recall, F1, and especially PR-AUC** — rather than
-accuracy.
+Fraud is about 0.17% of transactions in this dataset, so a model that always
+predicts "not fraud" scores 99.8% accuracy while catching nothing. This pipeline
+is built around the metrics that actually matter under that imbalance —
+precision, recall, F1, and PR-AUC — rather than accuracy.
 
-It is built like a real ML product, not a notebook:
+A few design choices worth calling out:
 
-- **Config-driven** — a single `configs/config.yaml` controls every seed,
-  split, hyperparameter, threshold, and path. No magic numbers in code.
-- **Leakage-free pipelines** — scaling and SMOTE live *inside* an
-  `imblearn` pipeline, fit on training folds only.
-- **Five models compared** — Logistic Regression, Random Forest, XGBoost,
-  LightGBM, and CatBoost — automatically benchmarked and the best (by PR-AUC)
-  promoted to production.
-- **Hyperparameter tuning** with Optuna, **experiment tracking** with MLflow,
-  and **explainability** with SHAP.
-- **Served** behind a FastAPI REST API, containerised with Docker, and
-  guarded by a full **pytest** suite + **GitHub Actions CI**.
+- **Config-driven.** A single `configs/config.yaml` holds every seed, split,
+  hyperparameter, threshold, and path, so there are no magic numbers scattered
+  through the code.
+- **Leakage-free pipelines.** Scaling and SMOTE live inside an `imblearn`
+  pipeline and are fit on training folds only.
+- **Five models compared.** Logistic Regression, Random Forest, XGBoost,
+  LightGBM, and CatBoost are benchmarked, and the best by PR-AUC is selected.
+- **Tuning, tracking, explainability.** Optuna for hyperparameter search, MLflow
+  for experiment tracking, SHAP for feature attributions.
+- **Serving and CI.** A FastAPI service, a Docker image, a pytest suite, and a
+  GitHub Actions workflow.
 
-> **Data:** The project uses the real Kaggle
-> [Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
-> dataset. When it (or Kaggle credentials) is unavailable, the pipeline
-> transparently falls back to a **statistically-matched synthetic generator**, so
-> it runs end-to-end offline — in CI or on a fresh clone — with zero setup.
+The project uses the Kaggle
+[Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)
+dataset. When the data (or Kaggle credentials) is unavailable, the pipeline
+falls back to a synthetic generator with the same schema and class balance, so
+it runs end-to-end offline — in CI or on a fresh clone — without any setup.
 
 ## Architecture
 
-See [`docs/architecture.md`](docs/architecture.md) for full diagrams. In short:
+See [`docs/architecture.md`](docs/architecture.md) for the full diagrams. In short:
 
 ```mermaid
 flowchart LR
@@ -88,7 +98,7 @@ credit-card-fraud-detection/
 │   ├── evaluate.py           # metrics, threshold tuning, plots, comparison
 │   ├── explain.py            # SHAP explainability
 │   ├── tracking.py           # MLflow helpers
-│   └── predict.py            # production inference wrapper
+│   └── predict.py            # inference wrapper
 ├── tests/                    # pytest suite (config, data, train, eval, predict, API)
 ├── .github/workflows/ci.yml  # lint + test + smoke pipeline + docker build
 ├── main.py                   # end-to-end CLI orchestrator
@@ -99,7 +109,7 @@ credit-card-fraud-detection/
 ## Installation
 
 ```bash
-git clone https://github.com/<your-username>/credit-card-fraud-detection.git
+git clone https://github.com/MohdMudassirPasha/credit-card-fraud-detection.git
 cd credit-card-fraud-detection
 
 python -m venv .venv
@@ -110,27 +120,27 @@ pip install -r requirements.txt        # runtime only
 pip install -r requirements-dev.txt
 ```
 
-## Dataset setup (optional — synthetic fallback works without this)
+## Dataset setup (optional — the synthetic fallback works without this)
 
-To train on the **real** Kaggle data:
+To train on the real Kaggle data:
 
 1. Create a Kaggle account and generate an API token
    (Kaggle → *Account* → *Create New API Token*). This downloads `kaggle.json`.
 2. Place it at `~/.kaggle/kaggle.json` (Windows: `C:\Users\<you>\.kaggle\kaggle.json`)
-   — or set `KAGGLE_USERNAME` / `KAGGLE_KEY` environment variables.
+   — or set the `KAGGLE_USERNAME` / `KAGGLE_KEY` environment variables.
 3. Download the dataset:
 
    ```bash
    python -m src.data.download      # or: make data
    ```
 
-This fetches `creditcard.csv` (~150 MB) into `data/raw/`. **Large data files are
-never committed** — they are regenerated on demand. If the file is absent, the
-pipeline automatically uses the synthetic generator instead.
+This fetches `creditcard.csv` (~150 MB) into `data/raw/`. Large data files are
+not committed; they are regenerated on demand. If the file is absent, the
+pipeline uses the synthetic generator instead.
 
 ## Usage
 
-### Train & evaluate everything
+### Train and evaluate
 
 ```bash
 python main.py                        # all 5 models, no tuning
@@ -139,15 +149,15 @@ python main.py --models xgboost lightgbm   # a subset
 python main.py --no-mlflow            # disable experiment tracking
 ```
 
-The run will:
+A run will:
 
 1. Load data (real or synthetic) and make a stratified train/test split.
-2. (Optionally) tune hyperparameters with Optuna.
+2. Optionally tune hyperparameters with Optuna.
 3. Train all five models in leakage-free pipelines, logging each to MLflow.
-4. Evaluate on the untouched test set and write all plots/reports.
+4. Evaluate on the held-out test set and write the plots and reports.
 5. Save every model's metrics to `reports/metrics_summary.{csv,json}`.
 6. Promote the best model (by PR-AUC) to `models/best_model.joblib` and generate
-   SHAP explainability reports for it.
+   SHAP reports for it.
 
 ### Inspect experiments (MLflow)
 
@@ -162,14 +172,14 @@ make api                              # uvicorn on http://localhost:8000
 # Interactive docs at http://localhost:8000/docs
 ```
 
-## API documentation
+## API
 
-| Method | Endpoint         | Description                                   |
-| ------ | ---------------- | --------------------------------------------- |
-| `GET`  | `/`              | Service metadata and available endpoints.     |
-| `GET`  | `/health`        | Liveness/readiness; reports if model is loaded.|
-| `POST` | `/predict`       | Score a single transaction.                   |
-| `POST` | `/predict/batch` | Score many transactions in one call.          |
+| Method | Endpoint         | Description                                    |
+| ------ | ---------------- | ---------------------------------------------- |
+| `GET`  | `/`              | Service metadata and available endpoints.      |
+| `GET`  | `/health`        | Liveness/readiness; reports if model is loaded. |
+| `POST` | `/predict`       | Score a single transaction.                    |
+| `POST` | `/predict/batch` | Score many transactions in one call.           |
 
 **Example request:**
 
@@ -194,15 +204,15 @@ curl -X POST http://localhost:8000/predict \
 }
 ```
 
-## Performance & evaluation
+## Performance and evaluation
 
-Metrics are computed on a held-out, **un-resampled** test set that retains the
+Metrics are computed on a held-out, un-resampled test set that keeps the
 real-world class imbalance, with the decision threshold tuned to maximise F1 on
-the precision-recall curve. They are **generated fresh every run** — see
+the precision-recall curve. They are generated fresh on every run — see
 `reports/metrics_summary.csv` and the plots below; nothing here is hardcoded.
 
-For each model the pipeline records: **PR-AUC, ROC-AUC, precision, recall, F1,
-training time, and inference time**. The best model by PR-AUC is selected
+For each model the pipeline records PR-AUC, ROC-AUC, precision, recall, F1,
+training time, and inference time. The best model by PR-AUC is selected
 automatically.
 
 Generated reports (in `reports/`):
@@ -218,14 +228,13 @@ Generated reports (in `reports/`):
 | SHAP (summary / bar / force / importance) | `shap/` |
 | Optuna (history / importances / best params) | `optuna/` |
 
-> **Why PR-AUC, not accuracy or ROC-AUC?** On a 99.8%/0.2% split, accuracy is
-> meaningless and ROC-AUC can look strong even when the positive class is
-> predicted poorly. PR-AUC focuses on the rare fraud class, so it is the
-> selection metric used to choose the production model.
+PR-AUC is used for model selection rather than accuracy or ROC-AUC: on a
+99.8%/0.2% split accuracy is meaningless, and ROC-AUC can look strong even when
+the positive class is predicted poorly. PR-AUC focuses on the rare fraud class.
 
 ## Docker
 
-Run the full stack (API + MLflow UI) with one command:
+Run the API and the MLflow UI together:
 
 ```bash
 docker compose up --build
@@ -234,14 +243,14 @@ docker compose up --build
 - API → http://localhost:8000 (docs at `/docs`)
 - MLflow → http://localhost:5000
 
-Or build/run just the API image:
+Or build and run just the API image:
 
 ```bash
 make docker            # docker build -t credit-card-fraud-detection:latest .
 docker run -p 8000:8000 -v "$(pwd)/models:/app/models" credit-card-fraud-detection:latest
 ```
 
-## Testing & quality
+## Testing and quality
 
 ```bash
 make test              # pytest (config, preprocessing, training, evaluation,
@@ -250,8 +259,8 @@ make lint              # ruff + black --check + isort --check
 make format            # auto-format with black + isort
 ```
 
-CI (GitHub Actions) runs linting, the full test suite (with coverage), a smoke
-training run on synthetic data, and a Docker build on every push and PR.
+CI (GitHub Actions) runs linting, the test suite with coverage, a smoke training
+run on synthetic data, and a Docker build on every push and pull request.
 
 ## Makefile commands
 
@@ -266,15 +275,14 @@ training run on synthetic data, and a Docker build on every push and PR.
 | `make docker` / `make docker-up` | Build image / run full stack |
 | `make clean` | Remove caches and generated artifacts |
 
-## Future work
+## Possible next steps
 
-- Cost-sensitive thresholding (assign a £ cost to false negatives vs. false
-  positives and optimise against expected cost, not just F1).
-- Probability calibration (isotonic / Platt) on the imbalanced test
-  distribution.
+- Cost-sensitive thresholding: assign a cost to false negatives vs. false
+  positives and optimise expected cost instead of F1.
+- Probability calibration (isotonic / Platt) on the imbalanced test distribution.
 - Drift monitoring and scheduled retraining.
-- Model registry + staged deployment (MLflow Model Registry).
-- Feature store integration and online/offline parity checks.
+- Model registry and staged deployment (MLflow Model Registry).
+- Feature store integration with online/offline parity checks.
 
 ## License
 

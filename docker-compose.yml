@@ -1,11 +1,13 @@
 # ---------------------------------------------------------------------------
 # Local development / demo stack:
-#   * api     — the FastAPI fraud-detection service
-#   * mlflow  — the MLflow tracking UI
+#   * api       — the FastAPI fraud-detection service
+#   * dashboard — the Dash + Plotly analytics frontend
+#   * mlflow    — the MLflow tracking UI
 #
 # Start everything with:  docker compose up --build
-# The API serves on http://localhost:8000 (docs at /docs);
-# MLflow UI on http://localhost:5000.
+#   API serves on   http://localhost:8000 (docs at /docs)
+#   Dashboard on    http://localhost:8050
+#   MLflow UI on    http://localhost:5000
 # ---------------------------------------------------------------------------
 services:
   api:
@@ -19,8 +21,24 @@ services:
       - ./models:/app/models
       - ./reports:/app/reports
       - ./logs:/app/logs
+      - ./data:/app/data
     environment:
       - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  dashboard:
+    # Reuses the same image; only the start command differs.
+    image: credit-card-fraud-detection:latest
+    container_name: fraud-dashboard
+    command: ["python", "-m", "dashboard.app"]
+    ports:
+      - "8050:8050"
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Reach the API by its service name on the compose network.
+      - DASHBOARD_API_URL=http://api:8000
+    depends_on:
+      - api
     restart: unless-stopped
 
   mlflow:

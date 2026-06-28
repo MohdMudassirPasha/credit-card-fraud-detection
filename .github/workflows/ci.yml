@@ -28,15 +28,19 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Lint (ruff)
-        run: ruff check src app tests main.py
+        run: ruff check src app dashboard tests main.py
 
       - name: Format check (black + isort)
         run: |
-          black --check src app tests main.py
-          isort --check-only src app tests main.py
+          black --check src app dashboard tests main.py
+          isort --check-only src app dashboard tests main.py
+
+      - name: Type check (mypy, non-blocking)
+        run: mypy app dashboard
+        continue-on-error: true
 
       - name: Run tests
-        run: pytest --cov=src --cov=app --cov-report=term-missing
+        run: pytest --cov=src --cov=app --cov=dashboard --cov-report=term-missing
 
       - name: Smoke-test the training pipeline (synthetic data, fast subset)
         run: |

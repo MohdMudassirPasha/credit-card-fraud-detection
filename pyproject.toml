@@ -5,13 +5,13 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "credit-card-fraud-detection"
 version = "1.0.0"
-description = "Production-grade ML pipeline for credit card fraud detection."
+description = "Machine-learning pipeline for credit card fraud detection."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 
-[tool.setuptools]
-packages = ["src", "src.data", "app"]
+[tool.setuptools.packages.find]
+include = ["src*", "app*", "dashboard*"]
 
 # ---------------------------------------------------------------------------
 # Black — code formatter
@@ -26,7 +26,7 @@ target-version = ["py310", "py311"]
 [tool.isort]
 profile = "black"
 line_length = 90
-known_first_party = ["src", "app"]
+known_first_party = ["src", "app", "dashboard"]
 
 # ---------------------------------------------------------------------------
 # Ruff — linter
@@ -58,3 +58,21 @@ filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::UserWarning",
 ]
+
+# ---------------------------------------------------------------------------
+# mypy — static type checking (pragmatic: third-party stubs are often absent
+# for the ML stack, so missing imports are ignored rather than failing).
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+exclude = ['^build/', '^dist/']
+
+[[tool.mypy.overrides]]
+# Tests favour brevity over exhaustive annotations.
+module = "tests.*"
+ignore_errors = true

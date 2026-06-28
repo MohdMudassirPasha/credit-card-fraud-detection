@@ -1,16 +1,13 @@
 """Preprocessing: leakage-free splitting and pipeline construction.
 
-The previous implementation scaled features and applied SMOTE *before* handing
-data to the models, which risks subtle data leakage and forces every consumer
-to remember the exact transform order. This version builds the scaling and
-SMOTE steps *inside* an :class:`imblearn.pipeline.Pipeline` so that:
+Scaling and SMOTE are kept inside an :class:`imblearn.pipeline.Pipeline` rather
+than applied to the data up front. This means:
 
-* the scaler is fit only on training folds (no test-set statistics leak in);
-* SMOTE runs only during ``fit`` and is automatically skipped at predict time
-  (imbalanced-learn samplers are inert during inference), so the persisted
-  pipeline is directly deployable;
-* a single fitted object encapsulates preprocessing + model — exactly what is
-  saved as the production artifact.
+* the scaler is fit only on training folds, so no test-set statistics leak in;
+* SMOTE runs only during ``fit`` and is skipped at predict time (imbalanced-learn
+  samplers are inert during inference), so the saved pipeline is deployable as-is;
+* a single fitted object holds preprocessing and the model together, which is
+  what gets persisted as the production artifact.
 """
 
 from __future__ import annotations
