@@ -1,0 +1,106 @@
+# ===========================================================================
+# Credit Card Fraud Detection — central configuration.
+#
+# This file is the single source of truth for the whole project. Every module
+# loads its settings from here via `src.config.load_config()`; there are no
+# hardcoded paths, seeds, or hyperparameters anywhere in the codebase.
+# ===========================================================================
+
+# Global random seed used for every stochastic component (splits, SMOTE,
+# model initialisation, Optuna sampler) so runs are fully reproducible.
+seed: 42
+
+data:
+  # Kaggle dataset slug used by the download helper (src/data/download.py).
+  kaggle_dataset: "mlg-ulb/creditcardfraud"
+  # Filename of the CSV inside the Kaggle archive.
+  raw_filename: "creditcard.csv"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  # Name of the target column.
+  target_column: "Class"
+  # Columns scaled by the preprocessing pipeline (PCA components V1..V28 are
+  # already standardised by the dataset authors, so only these need scaling).
+  columns_to_scale: ["Time", "Amount"]
+  # Fraction of data held out for the test set (stratified by target).
+  test_size: 0.2
+  # When the real Kaggle CSV is absent, fall back to the synthetic generator.
+  use_synthetic_fallback: true
+  # Number of rows for the synthetic fallback dataset.
+  synthetic_samples: 150000
+  # Fraud ratio for the synthetic fallback dataset.
+  synthetic_fraud_ratio: 0.0017
+
+smote:
+  enabled: true
+  # "auto" balances the minority class to match the majority class.
+  sampling_strategy: "auto"
+  k_neighbors: 5
+
+# Default (un-tuned) hyperparameters for each model. Optuna overrides these
+# when tuning is enabled. Keys must match the model names in src/models.py.
+models:
+  logistic_regression:
+    max_iter: 1000
+    C: 1.0
+    solver: "lbfgs"
+  random_forest:
+    n_estimators: 150
+    max_depth: 6
+    min_samples_leaf: 5
+  xgboost:
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.9
+    colsample_bytree: 0.9
+  lightgbm:
+    n_estimators: 300
+    max_depth: -1
+    num_leaves: 31
+    learning_rate: 0.05
+  catboost:
+    iterations: 300
+    depth: 6
+    learning_rate: 0.1
+
+tuning:
+  enabled: false          # toggled on with `python main.py --tune`
+  n_trials: 20
+  cv_folds: 3
+  timeout: 600            # seconds; null for no timeout
+  # Optuna optimises this metric. average_precision == PR-AUC.
+  scoring: "average_precision"
+
+threshold:
+  # Strategy for picking the decision threshold on the precision-recall curve.
+  # "max_f1" selects the threshold maximising F1 (honest default for imbalance).
+  strategy: "max_f1"
+  default: 0.5
+
+# Metric used to select the production model. PR-AUC is far more informative
+# than accuracy on a ~0.17% positive-class problem.
+selection_metric: "pr_auc"
+
+explainability:
+  enabled: true
+  # Number of background/sample rows used for SHAP (kept small for speed).
+  sample_size: 1000
+
+mlflow:
+  enabled: true
+  tracking_uri: "file:./mlruns"
+  experiment_name: "credit-card-fraud-detection"
+
+paths:
+  models_dir: "models"
+  reports_dir: "reports"
+  logs_dir: "logs"
+  best_model_file: "models/best_model.joblib"
+  model_metadata_file: "models/model_metadata.json"
+
+logging:
+  level: "INFO"           # DEBUG | INFO | WARNING | ERROR
+  file: "logs/pipeline.log"
+  max_bytes: 5242880      # 5 MB before rotation
+  backup_count: 3

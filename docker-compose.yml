@@ -1,0 +1,38 @@
+# ---------------------------------------------------------------------------
+# Local development / demo stack:
+#   * api     — the FastAPI fraud-detection service
+#   * mlflow  — the MLflow tracking UI
+#
+# Start everything with:  docker compose up --build
+# The API serves on http://localhost:8000 (docs at /docs);
+# MLflow UI on http://localhost:5000.
+# ---------------------------------------------------------------------------
+services:
+  api:
+    build: .
+    image: credit-card-fraud-detection:latest
+    container_name: fraud-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount artifacts so a model trained on the host is served by the API.
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.15.1
+    container_name: fraud-mlflow
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlruns
+    command: >
+      mlflow server
+      --backend-store-uri file:/mlruns
+      --host 0.0.0.0
+      --port 5000
+    restart: unless-stopped

@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "credit-card-fraud-detection"
+version = "1.0.0"
+description = "Production-grade ML pipeline for credit card fraud detection."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+
+[tool.setuptools]
+packages = ["src", "src.data", "app"]
+
+# ---------------------------------------------------------------------------
+# Black — code formatter
+# ---------------------------------------------------------------------------
+[tool.black]
+line-length = 90
+target-version = ["py310", "py311"]
+
+# ---------------------------------------------------------------------------
+# isort — import sorter (black-compatible profile)
+# ---------------------------------------------------------------------------
+[tool.isort]
+profile = "black"
+line_length = 90
+known_first_party = ["src", "app"]
+
+# ---------------------------------------------------------------------------
+# Ruff — linter
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 90
+target-version = "py311"
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: isort, B: bugbear, UP: pyupgrade,
+# C4: comprehensions, SIM: simplify.
+select = ["E", "W", "F", "I", "B", "UP", "C4", "SIM"]
+ignore = [
+    "E501",   # line length handled by black
+    "B008",   # FastAPI uses callables in argument defaults (Depends, etc.)
+    "UP038",  # isinstance(x, X | Y) is slower at runtime than the tuple form
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+
+# ---------------------------------------------------------------------------
+# Pytest
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]
