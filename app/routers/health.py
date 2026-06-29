@@ -19,7 +19,8 @@ router = APIRouter(tags=["meta"])
 @router.get("/health", response_model=HealthResponse, summary="Health check")
 def health(app_state: AppState = Depends(get_state)) -> HealthResponse:
     """Report service health, model-loaded status, and uptime."""
-    model_name = app_state.predictor.model_name if app_state.model_loaded else None
+    predictor = app_state.predictor
+    model_name = predictor.model_name if predictor is not None else None
     return HealthResponse(
         status="ok" if app_state.model_loaded else "degraded",
         model_loaded=app_state.model_loaded,

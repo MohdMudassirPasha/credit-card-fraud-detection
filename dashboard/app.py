@@ -17,12 +17,7 @@ from dash import Dash, dcc, html
 from dashboard.callbacks import register_callbacks
 from dashboard.components.navbar import build_navbar, health_interval
 from dashboard.components.sidebar import build_sidebar
-from dashboard.config import (
-    APP_TITLE,
-    DASHBOARD_HOST,
-    DASHBOARD_PORT,
-    DEBUG,
-)
+from dashboard.config import APP_TITLE, DASHBOARD_HOST, DASHBOARD_PORT, DEBUG
 
 # Font Awesome (icons) + Google Fonts (Inter) loaded alongside the Bootstrap theme.
 _EXTERNAL_STYLESHEETS = [

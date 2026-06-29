@@ -9,11 +9,11 @@ from __future__ import annotations
 from typing import Any
 
 # Brand palette shared by both themes.
-ACCENT = "#6366f1"        # indigo
-ACCENT_2 = "#22d3ee"      # cyan
-FRAUD = "#ef4444"         # red
-SAFE = "#10b981"          # emerald
-WARN = "#f59e0b"          # amber
+ACCENT = "#6366f1"  # indigo
+ACCENT_2 = "#22d3ee"  # cyan
+FRAUD = "#ef4444"  # red
+SAFE = "#10b981"  # emerald
+WARN = "#f59e0b"  # amber
 
 # Per-tier risk colours (match app.utils.risk.RiskLevel).
 RISK_COLORS: dict[str, str] = {

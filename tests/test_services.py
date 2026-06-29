@@ -16,9 +16,9 @@ from app.utils.risk import RiskLevel, confidence_pct, risk_level
 @pytest.mark.parametrize(
     "prob, threshold, expected",
     [
-        (0.95, 0.9, RiskLevel.CRITICAL),
-        (0.92, 0.9, RiskLevel.HIGH),
-        (0.55, 0.9, RiskLevel.MEDIUM),
+        (0.95, 0.9, RiskLevel.CRITICAL),  # >= 0.90 critical band
+        (0.87, 0.85, RiskLevel.HIGH),  # >= threshold but < 0.90
+        (0.55, 0.9, RiskLevel.MEDIUM),  # >= 0.40 medium band
         (0.10, 0.9, RiskLevel.LOW),
     ],
 )
@@ -40,8 +40,8 @@ def test_history_is_capped_and_counts_totals() -> None:
     for i in range(5):
         history.add({"fraud_probability": 0.1 * i, "latency_ms": 10.0})
 
-    assert len(history) == 3           # only the last 3 retained
-    assert history.total == 5          # lifetime counter survives eviction
+    assert len(history) == 3  # only the last 3 retained
+    assert history.total == 5  # lifetime counter survives eviction
     assert history.avg_latency_ms == 10.0
     # recent() returns newest first.
     assert history.recent(1)[0]["fraud_probability"] == pytest.approx(0.4)

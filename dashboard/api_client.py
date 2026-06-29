@@ -32,9 +32,7 @@ def _get(path: str, **kwargs: Any) -> Result:
 def _post(path: str, json: Any) -> Result:
     """POST ``json`` to ``path`` and return ``(json, error)``."""
     try:
-        resp = requests.post(
-            f"{API_BASE_URL}{path}", json=json, timeout=REQUEST_TIMEOUT
-        )
+        resp = requests.post(f"{API_BASE_URL}{path}", json=json, timeout=REQUEST_TIMEOUT)
         if resp.status_code >= 400:
             return None, _error_detail(resp)
         return resp.json(), None

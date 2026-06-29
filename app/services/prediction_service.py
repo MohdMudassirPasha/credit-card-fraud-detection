@@ -10,7 +10,7 @@ keeps routers free of business logic.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from app.services.history import PredictionHistory
@@ -32,7 +32,9 @@ class PredictionService:
     def model_name(self) -> str:
         return self._predictor.model_name
 
-    def _enrich(self, raw: dict[str, Any], latency_ms: float, when: str) -> dict[str, Any]:
+    def _enrich(
+        self, raw: dict[str, Any], latency_ms: float, when: str
+    ) -> dict[str, Any]:
         """Expand one raw predictor result into the full response payload."""
         probability = float(raw["fraud_probability"])
         is_fraud = bool(raw["is_fraud"])
@@ -59,7 +61,7 @@ class PredictionService:
         with Timer() as timer:
             raw_results = self._predictor.predict(records)
 
-        when = datetime.now(timezone.utc).isoformat()
+        when = datetime.now(UTC).isoformat()
         per_row_ms = timer.elapsed_ms / max(len(raw_results), 1)
         enriched = [self._enrich(raw, per_row_ms, when) for raw in raw_results]
 

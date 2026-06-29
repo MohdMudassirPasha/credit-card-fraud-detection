@@ -24,7 +24,9 @@ from app.startup import AppState
 router = APIRouter(tags=["model"])
 
 
-@router.get("/model-info", response_model=ModelInfoResponse, summary="Production model info")
+@router.get(
+    "/model-info", response_model=ModelInfoResponse, summary="Production model info"
+)
 def model_info(
     model_service: ModelService = Depends(get_model_service),
 ) -> ModelInfoResponse:
@@ -32,7 +34,9 @@ def model_info(
     return ModelInfoResponse(**model_service.model_info())
 
 
-@router.get("/metrics", response_model=MetricsResponse, summary="Model metrics & counters")
+@router.get(
+    "/metrics", response_model=MetricsResponse, summary="Model metrics & counters"
+)
 def metrics(
     model_service: ModelService = Depends(get_model_service),
 ) -> MetricsResponse:

@@ -87,7 +87,9 @@ def create_app() -> FastAPI:
     app.include_router(prediction.router)
     app.include_router(model.router)
 
-    logger.info("FastAPI application configured (%s v%s).", settings.title, settings.version)
+    logger.info(
+        "FastAPI application configured (%s v%s).", settings.title, settings.version
+    )
     return app
 
 

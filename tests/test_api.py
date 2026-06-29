@@ -82,7 +82,9 @@ def test_api_shim_exposes_same_app() -> None:
 # --------------------------------------------------------------------------- #
 # Prediction                                                                  #
 # --------------------------------------------------------------------------- #
-def test_predict_returns_enriched_prediction(client_with_model, sample_transaction) -> None:
+def test_predict_returns_enriched_prediction(
+    client_with_model, sample_transaction
+) -> None:
     response = client_with_model.post("/predict", json=sample_transaction)
     assert response.status_code == 200
     body = response.json()

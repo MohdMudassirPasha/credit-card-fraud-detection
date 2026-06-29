@@ -33,7 +33,10 @@ def register(app: Dash) -> None:
         if err or not data:
             return _badge("API offline"), "health-badge offline"
         if data.get("model_loaded"):
-            return _badge(f"Online · {data.get('model_name', 'model')}"), "health-badge online"
+            return (
+                _badge(f"Online · {data.get('model_name', 'model')}"),
+                "health-badge online",
+            )
         return _badge("Degraded · no model"), "health-badge degraded"
 
 

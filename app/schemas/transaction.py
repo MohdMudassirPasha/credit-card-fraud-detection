@@ -8,6 +8,8 @@ schema at ``/docs`` instead of an opaque ``dict``.
 
 from __future__ import annotations
 
+from typing import Any, cast
+
 from pydantic import BaseModel, ConfigDict, Field
 
 # Canonical example transaction reused by OpenAPI docs and as a dashboard
@@ -80,4 +82,6 @@ class TransactionFeatures(BaseModel):
     V28: float
     Amount: float = Field(..., ge=0.0, description="Transaction amount.")
 
-    model_config = ConfigDict(json_schema_extra={"example": EXAMPLE_TRANSACTION})
+    model_config = ConfigDict(
+        json_schema_extra={"example": cast(dict[str, Any], EXAMPLE_TRANSACTION)}
+    )

@@ -30,10 +30,14 @@ def stat_card(title: str, value: Any, icon: str, *, accent: str = "indigo") -> d
         glass_card(
             html.Div(
                 [
-                    html.Div(html.I(className=icon), className=f"stat-icon stat-{accent}"),
+                    html.Div(
+                        html.I(className=icon), className=f"stat-icon stat-{accent}"
+                    ),
                     html.Div(
                         [
-                            html.Div(value, className="stat-value", id=f"stat-{title}".lower()),
+                            html.Div(
+                                value, className="stat-value", id=f"stat-{title}".lower()
+                            ),
                             html.Div(title, className="stat-label"),
                         ]
                     ),
@@ -54,7 +58,11 @@ def risk_badge(risk_level: str) -> html.Span:
     return html.Span(
         risk_level,
         className="risk-badge",
-        style={"backgroundColor": f"{color}22", "color": color, "border": f"1px solid {color}"},
+        style={
+            "backgroundColor": f"{color}22",
+            "color": color,
+            "border": f"1px solid {color}",
+        },
     )
 
 

@@ -7,11 +7,10 @@ theme change keeps every chart's colours in sync with the toggle.
 
 from __future__ import annotations
 
-from dash import ALL, Dash, Input, Output, ctx, html
+from dash import ALL, Dash, Input, Output, ctx
 
-from dashboard.config import SECTIONS
-from dashboard.sections import history_table, render_section
 from dashboard import api_client
+from dashboard.sections import history_table, render_section
 
 
 def register(app: Dash) -> None:
@@ -59,4 +58,6 @@ def register(app: Dash) -> None:
 
         data, _ = api_client.get_history(limit=50)
         predictions = (data or {}).get("predictions", [])
-        return charts.history_line(predictions, theme or "dark"), history_table(predictions)
+        return charts.history_line(predictions, theme or "dark"), history_table(
+            predictions
+        )

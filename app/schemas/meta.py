@@ -30,7 +30,9 @@ class HealthResponse(BaseModel):
 
     model_config = ConfigDict(protected_namespaces=())
 
-    status: str = Field(..., description="'ok' when the model is loaded, else 'degraded'.")
+    status: str = Field(
+        ..., description="'ok' when the model is loaded, else 'degraded'."
+    )
     model_loaded: bool
     model_name: str | None = None
     uptime_seconds: float = Field(..., description="Seconds since the process started.")
@@ -88,7 +90,9 @@ class MetricsResponse(BaseModel):
         default_factory=dict, description="Legit/fraud class balance of the dataset."
     )
     requests_served: int = Field(..., description="Predictions scored since startup.")
-    avg_latency_ms: float = Field(..., description="Mean inference latency since startup.")
+    avg_latency_ms: float = Field(
+        ..., description="Mean inference latency since startup."
+    )
 
 
 class FeatureImportanceItem(BaseModel):

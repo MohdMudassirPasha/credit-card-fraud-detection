@@ -18,7 +18,7 @@ Design notes
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from app.core.logging import get_logger
@@ -44,7 +44,7 @@ class AppState:
         self.feature_importance: list[dict] = []
         self.dataset_summary: dict = {}
         self.history: PredictionHistory = PredictionHistory()
-        self.started_at: datetime = datetime.now(timezone.utc)
+        self.started_at: datetime = datetime.now(UTC)
 
     @property
     def model_loaded(self) -> bool:
@@ -52,7 +52,7 @@ class AppState:
 
     @property
     def uptime_seconds(self) -> float:
-        return round((datetime.now(timezone.utc) - self.started_at).total_seconds(), 2)
+        return round((datetime.now(UTC) - self.started_at).total_seconds(), 2)
 
 
 # Module-level singleton shared across requests.
@@ -70,7 +70,7 @@ def initialize() -> AppState:
     configure_logging(config)
 
     state.config = config
-    state.started_at = datetime.now(timezone.utc)
+    state.started_at = datetime.now(UTC)
     state.history = PredictionHistory(maxlen=settings.history_size)
 
     # 1. Production model (optional — degraded mode if absent).

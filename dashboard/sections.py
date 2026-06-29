@@ -53,12 +53,20 @@ def build_overview(theme: str) -> html.Div:
 
     kpis = dbc.Row(
         [
-            stat_card("Model", model_name.upper(), "fa-solid fa-microchip", accent="indigo"),
             stat_card(
-                "PR-AUC", f"{prod.get('pr_auc', 0):.3f}", "fa-solid fa-bullseye", accent="cyan"
+                "Model", model_name.upper(), "fa-solid fa-microchip", accent="indigo"
             ),
             stat_card(
-                "ROC-AUC", f"{prod.get('roc_auc', 0):.3f}", "fa-solid fa-chart-area", accent="green"
+                "PR-AUC",
+                f"{prod.get('pr_auc', 0):.3f}",
+                "fa-solid fa-bullseye",
+                accent="cyan",
+            ),
+            stat_card(
+                "ROC-AUC",
+                f"{prod.get('roc_auc', 0):.3f}",
+                "fa-solid fa-chart-area",
+                accent="green",
             ),
             stat_card(
                 "Requests",
@@ -76,7 +84,9 @@ def build_overview(theme: str) -> html.Div:
                 glass_card(
                     [
                         html.H6("Model Comparison", className="card-heading"),
-                        _graph(charts.metrics_bar(models, theme), style={"height": "330px"}),
+                        _graph(
+                            charts.metrics_bar(models, theme), style={"height": "330px"}
+                        ),
                     ]
                 ),
                 lg=8,
@@ -212,7 +222,10 @@ def render_prediction_result(result: dict[str, Any], theme: str) -> html.Div:
     details = html.Div(
         [
             html.Div(
-                [html.Span(label, className="kv-key"), html.Span(value, className="kv-val")],
+                [
+                    html.Span(label, className="kv-key"),
+                    html.Span(value, className="kv-val"),
+                ],
                 className="kv-row",
             )
             for label, value in detail_rows
@@ -286,16 +299,16 @@ def build_model(theme: str) -> html.Div:
 def _metrics_table(models: list[dict[str, Any]], prod: str | None) -> list[Any]:
     """A styled comparison table; the production row is highlighted."""
     cols = ["model", "precision", "recall", "f1_score", "roc_auc", "pr_auc"]
-    header = html.Thead(
-        html.Tr([html.Th(c.replace("_", " ").upper()) for c in cols])
-    )
+    header = html.Thead(html.Tr([html.Th(c.replace("_", " ").upper()) for c in cols]))
     rows = []
     for m in models:
         is_prod = m.get("model") == prod
         cells = []
         for c in cols:
             value = m.get(c, "—")
-            cells.append(html.Td(f"{value:.4f}" if isinstance(value, float) else str(value)))
+            cells.append(
+                html.Td(f"{value:.4f}" if isinstance(value, float) else str(value))
+            )
         rows.append(html.Tr(cells, className="prod-row" if is_prod else ""))
     return [
         html.H6("Model Benchmark", className="card-heading"),
@@ -336,7 +349,9 @@ def build_history(theme: str) -> html.Div:
                         glass_card(
                             [
                                 html.H6("Recent Transactions", className="card-heading"),
-                                html.Div(id="history-table", className="history-table-wrap"),
+                                html.Div(
+                                    id="history-table", className="history-table-wrap"
+                                ),
                             ]
                         ),
                         lg=5,
@@ -366,7 +381,10 @@ def history_table(history: list[dict[str, Any]]) -> Any:
         for item in history[:12]
     ]
     return dbc.Table(
-        [header, html.Tbody(rows)], class_name="metrics-table", borderless=True, hover=True
+        [header, html.Tbody(rows)],
+        class_name="metrics-table",
+        borderless=True,
+        hover=True,
     )
 
 

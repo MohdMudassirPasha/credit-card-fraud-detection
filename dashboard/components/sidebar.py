@@ -27,7 +27,9 @@ def build_sidebar(active: str = "overview") -> html.Nav:
 
     footer = html.Div(
         [
-            html.Div(html.I(className="fa-solid fa-circle-nodes"), className="sidebar-foot-ico"),
+            html.Div(
+                html.I(className="fa-solid fa-circle-nodes"), className="sidebar-foot-ico"
+            ),
             html.Div(
                 [
                     html.Div("Production model", className="sidebar-foot-label"),

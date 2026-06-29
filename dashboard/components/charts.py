@@ -68,7 +68,10 @@ def feature_importance_bar(
             x=[float(f["importance"]) for f in top],
             y=[f["feature"] for f in top],
             orientation="h",
-            marker={"color": [float(f["importance"]) for f in top], "colorscale": "Tealgrn"},
+            marker={
+                "color": [float(f["importance"]) for f in top],
+                "colorscale": "Tealgrn",
+            },
             hovertemplate="%{y}: %{x:.4f}<extra></extra>",
         )
     )
@@ -119,7 +122,9 @@ def history_line(history: list[dict[str, Any]], theme: str = "dark") -> go.Figur
             line={"color": ACCENT, "width": 2, "shape": "spline"},
             marker={
                 "size": 8,
-                "color": [RISK_COLORS.get(h.get("risk_level", "LOW"), SAFE) for h in series],
+                "color": [
+                    RISK_COLORS.get(h.get("risk_level", "LOW"), SAFE) for h in series
+                ],
             },
             hovertemplate="#%{x}: %{y:.3f}<extra></extra>",
         )

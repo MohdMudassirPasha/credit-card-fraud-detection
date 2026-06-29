@@ -16,16 +16,14 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.core.logging import get_logger
-from src.exceptions import (
-    FraudDetectionError,
-    ModelNotFoundError,
-    PredictionError,
-)
+from src.exceptions import FraudDetectionError, ModelNotFoundError, PredictionError
 
 logger = get_logger(__name__)
 
 
-def _envelope(request: Request, error: str, detail: str, status_code: int) -> JSONResponse:
+def _envelope(
+    request: Request, error: str, detail: str, status_code: int
+) -> JSONResponse:
     """Build the uniform JSON error response."""
     return JSONResponse(
         status_code=status_code,
